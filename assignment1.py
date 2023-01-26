@@ -10,6 +10,9 @@ from numpy.linalg import norm
 
 def f(x):
     return x**4 - x**3 -10
+
+
+#Given initial interval [a,b] such that f(a)f(b) < 0, n is number of steps
 def bisection_method(a, b, n):
     condition = True
     i = 1
@@ -28,6 +31,25 @@ def bisection_method(a, b, n):
 
 
 
+def fixedp(f,x0,tol=10e-5,maxiter=100):
+ """ Fixed point algorithm """
+ e = 1
+ itr = 0
+ xp = []
+ while(e > tol and itr < maxiter):
+  x = f(x0)      # fixed point equation
+  e = norm(x0-x) # error at the current step
+  x0 = x
+  xp.append(x0)  # save the solution of the current step
+  itr = itr + 1
+ return x,xp
+
+
+def g(x):
+ x[0] = 1/4*(x[0]*x[0] + x[1]*x[1])
+ x[1] = sin(x[0]+1)
+ return array(x)
+
 
 
 def exercise1a():
@@ -42,6 +64,7 @@ def exercise1a():
         print("Try again")
     else:
         bisection_method(a, b, n)
+
 
 def exercise1b():
     a = input("First approximation root: ")
@@ -59,24 +82,6 @@ def exercise1b():
         print("Try again")
     else:
         bisection_method(a, b, n)
-
-def fixedp(f,x0,tol=10e-5,maxiter=100):
- """ Fixed point algorithm """
- e = 1
- itr = 0
- xp = []
- while(e > tol and itr < maxiter):
-  x = f(x0)      # fixed point equation
-  e = norm(x0-x) # error at the current step
-  x0 = x
-  xp.append(x0)  # save the solution of the current step
-  itr = itr + 1
- return x,xp
-
-def g(x):
- x[0] = 1/4*(x[0]*x[0] + x[1]*x[1])
- x[1] = sin(x[0]+1)
- return array(x)
 
 
 def exercise2():
@@ -103,4 +108,4 @@ def exercise2():
 exercise2()
 
 
-#Given initial interval [a,b] such that f(a)f(b) < 0, n is number of steps
+
