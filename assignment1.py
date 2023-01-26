@@ -7,7 +7,7 @@
 
 def f(x):
     return x**4 - x**3 -10
-#Given initial interval [a,b] such that f(a)f(b) < 0, n is number of iterations
+#Given initial interval [a,b] such that f(a)f(b) < 0, n is number of steps
 def bisection_method(a, b, n):
     condition = True
     i = 1
@@ -27,10 +27,10 @@ def bisection_method(a, b, n):
 
 a = input("First approximation root: ")
 b = input("Second approximation root: ")
-n = input("Input number of iterations")
+n = input("Input number of bisection steps: ")
 a = float(a)
 b = float(b)
-n = int(n)  #number of iterations
+n = int(n)  #number of steps
 
 if f(a)*f(b) > 0:
     print("Try again")
