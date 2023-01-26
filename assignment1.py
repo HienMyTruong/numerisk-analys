@@ -50,7 +50,7 @@ def g(x):
  x[1] = sin(x[0]+1)
  return array(x)
 
-
+#hej
 
 def exercise1a():
     a = input("First approximation root: ")
