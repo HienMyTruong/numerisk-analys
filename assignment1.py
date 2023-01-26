@@ -12,6 +12,15 @@ def f(x):
     return x**4 - x**3 -10
 
 
+def h(x):
+    # print(x)
+    #return math.log(x-x**3)
+    return math.cos(x)
+    #return math.cos(x)**2
+    #return (2*(x**3)-math.exp(x))/(3*(x**2)-1)
+    #return (x**3 + math.exp(x))
+
+
 #Given initial interval [a,b] such that f(a)f(b) < 0, n is number of steps
 def bisection_method(a, b, n):
     condition = True
@@ -29,7 +38,18 @@ def bisection_method(a, b, n):
             i = i + 1
     print("Required root is: ", x)
 
+def fixed_point_iteration(start_value, number_of_iterations):
+    i = 0
 
+    x = start_value
+    saved_iterations = list()
+
+    for i in range(number_of_iterations):
+        x = float(x)
+        saved_iterations.append(h(x))
+        x = h(x)
+
+    return saved_iterations
 
 def fixedp(f,x0,tol=10e-5,maxiter=100):
  """ Fixed point algorithm """
@@ -89,7 +109,7 @@ def exercise1b():
 
 
 
-def exercise2():
+def trying_fixed_point_iteration():
     x, xf = fixedp(g, [0, 1])
     print('   x =', x)
     print('f(x) =', g(xf[len(xf) - 1]))
@@ -107,25 +127,25 @@ def exercise2():
     plt.show()
 
 
-def h(x):
-    return (2*(x**3)-math.exp(x))/(3*(x**2)-1)
-    #print(x)
-    #return (x**3 + math.exp(x))
 
 
 
-def fixed_point_iteration(start_value, n):
-    i = 0
 
-    x = start_value
-    return_array = list()
-    while i < n:
-        i = i + 1
 
-        x = float(x)
-        return_array.append(h(x))
-        x = h(x)
+iterations = list()
+def fixed_point_iteration_recursive(start_value, n):
+    iterations.append(float(h(start_value)))
 
-    return return_array
+    if( n == 0 ):
+        return iterations
+    else:
+        fixed_point_iteration_recursive(h(start_value), n-1)
 
-print(fixed_point_iteration(9, 100))
+
+
+
+def exercise2a():
+    print(fixed_point_iteration(0.7390, 100))
+
+
+exercise2a()
