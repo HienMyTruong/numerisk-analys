@@ -76,7 +76,10 @@ def exercise1b():
     n = math.log( 1/(2*error),2)
     a = float(a)
     b = float(b)
+    print(n)
     n = int(n)  # number of steps
+
+
 
     if f(a) * f(b) > 0:
         print("Try again")
@@ -84,12 +87,12 @@ def exercise1b():
         bisection_method(a, b, n)
 
 
+
+
 def exercise2():
     x, xf = fixedp(g, [0, 1])
-    print
-    '   x =', x
-    print
-    'f(x) =', g(xf[len(xf) - 1])
+    print('   x =', x)
+    print('f(x) =', g(xf[len(xf) - 1]))
 
     f = lambda x: sqrt(x)
 
@@ -104,8 +107,25 @@ def exercise2():
     plt.show()
 
 
+def h(x):
+    return (2*(x**3)-math.exp(x))/(3*(x**2)-1)
+    #print(x)
+    #return (x**3 + math.exp(x))
 
-exercise2()
 
 
+def fixed_point_iteration(start_value, n):
+    i = 0
 
+    x = start_value
+    return_array = list()
+    while i < n:
+        i = i + 1
+
+        x = float(x)
+        return_array.append(h(x))
+        x = h(x)
+
+    return return_array
+
+print(fixed_point_iteration(9, 100))
