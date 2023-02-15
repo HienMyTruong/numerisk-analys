@@ -4,22 +4,14 @@ import matplotlib.pyplot as plt
 
 
 def divided_diff(x, y):
-    '''
-    function to calculate the divided
-    differences table
-    '''
     n = len(y)
     coef = np.zeros([n, n])
-    # the first column is y
     coef[:, 0] = y
 
     for j in range(1, n):
         for i in range(n - j):
             coef[i][j] = \
                 (coef[i + 1][j - 1] - coef[i][j - 1]) / (x[i + j] - x[i])
-
-
-
     return coef
 
 
@@ -90,6 +82,9 @@ y[0][0] = 3;
 y[1][0] = 1;
 y[2][0] = 3;
 y[3][0] = 7;
+
+y2 = [3, 1, 3, 7]
+#plot_results(x, y2)
 
 y = dividedDiffTable(x, y, n);
 
