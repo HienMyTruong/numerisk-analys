@@ -1,94 +1,101 @@
+from scipy.interpolate import CubicSpline
 import numpy as np
-from math import sqrt
+import matplotlib.pyplot as plt
+from scipy.special import binom
 
-def cubic_interp1d(x0, x, y):
-    """
-    Interpolate a 1-D function using cubic splines.
-      x0 : a float or an 1d-array
-      x : (N,) array_like
-          A 1-D array of real/complex values.
-      y : (N,) array_like
-          A 1-D array of real values. The length of y along the
-          interpolation axis must be equal to the length of x.
 
-    Implement a trick to generate at first step the cholesky matrice L of
-    the tridiagonal matrice A (thus L is a bidiagonal matrice that
-    can be solved in two distinct loops).
+x_points = [1, 2, 3]
+y_points = [1, 1, 0]
 
-    additional ref: www.math.uh.edu/~jingqiu/math4364/spline.pdf
-    """
-    x = np.asfarray(x)
-    y = np.asfarray(y)
 
-    # remove non finite values
-    # indexes = np.isfinite(x)
-    # x = x[indexes]
-    # y = y[indexes]
 
-    # check if sorted
-    if np.any(np.diff(x) < 0):
-        indexes = np.argsort(x)
-        x = x[indexes]
-        y = y[indexes]
+def plot_function_a(a, b):
+    def f(x):
+       return 1 + a*(x-1) - b*((x-1)**3)
 
-    size = len(x)
+    x = np.linspace(1,2, 100)
 
-    xdiff = np.diff(x)
-    ydiff = np.diff(y)
+    plt.plot(x, f(x), color='red')
 
-    # allocate buffer matrices
-    Li = np.empty(size)
-    Li_1 = np.empty(size-1)
-    z = np.empty(size)
+def calculated_function_x(t):
 
-    # fill diagonals Li and Li-1 and solve [L][y] = [B]
-    Li[0] = sqrt(2*xdiff[0])
-    Li_1[0] = 0.0
-    B0 = 0.0 # natural boundary
-    z[0] = B0 / Li[0]
+    return t**4 + 4*t + 1
 
-    for i in range(1, size-1, 1):
-        Li_1[i] = xdiff[i-1] / Li[i-1]
-        Li[i] = sqrt(2*(xdiff[i-1]+xdiff[i]) - Li_1[i-1] * Li_1[i-1])
-        Bi = 6*(ydiff[i]/xdiff[i] - ydiff[i-1]/xdiff[i-1])
-        z[i] = (Bi - Li_1[i-1]*z[i-1])/Li[i]
 
-    i = size - 1
-    Li_1[i-1] = xdiff[-1] / Li[i-1]
-    Li[i] = sqrt(2*xdiff[-1] - Li_1[i-1] * Li_1[i-1])
-    Bi = 0.0 # natural boundary
-    z[i] = (Bi - Li_1[i-1]*z[i-1])/Li[i]
 
-    # solve [L.T][x] = [y]
-    i = size-1
-    z[i] = z[i] / Li[i]
-    for i in range(size-2, -1, -1):
-        z[i] = (z[i] - Li_1[i-1]*z[i+1])/Li[i]
+def calculated_function_y(t):
 
-    # find index
-    index = x.searchsorted(x0)
-    np.clip(index, 1, size-1, index)
+    return (-1)*(t**4) + 8*(t**3) - 12*(t**2) + 8*t + 1
 
-    xi1, xi0 = x[index], x[index-1]
-    yi1, yi0 = y[index], y[index-1]
-    zi1, zi0 = z[index], z[index-1]
-    hi1 = xi1 - xi0
 
-    # calculate cubic
-    f0 = zi0/(6*hi1)*(xi1-x0)**3 + \
-         zi1/(6*hi1)*(x0-xi0)**3 + \
-         (yi1/hi1 - zi1*hi1/6)*(x0-xi0) + \
-         (yi0/hi1 - zi0*hi1/6)*(xi1-x0)
-    return f0
 
-if __name__ == '__main__':
-    import matplotlib.pyplot as plt
-    x = np.linspace(0, 10, 11)
-    y = np.sin(x)
-    plt.scatter(x, y)
+def plot_function_b(c,d):
 
-    x_new = np.linspace(0, 10, 201)
-    plt.plot(x_new, cubic_interp1d(x_new, x, y))
 
+    def f(x):
+       return 1 + c*(x-2) - (3/4)*((x-2)**2) + d*((x-2)**3)
+
+    x = np.linspace(2, 3, 100)
+
+    plt.plot(x, f(x), color='orange')
+
+
+def plot_cubic_spline(x_points, y_points):
+    if np.any(np.diff(x_points) < 0):
+        indexes = np.argsort(x_points).astype(int)
+        x_points = np.array(x_points)[indexes]
+        y_points = np.array(y_points)[indexes]
+
+    f = CubicSpline(x_points, y_points, bc_type= 'natural')
+    x_new = np.linspace(min(x_points), max(x_points), 100)
+    y_new = f(x_new)
+
+    plt.plot(x_new, y_new)
+    plt.scatter(x_points, y_points)
+    plt.title('Cubic Spline interpolation')
+
+
+def exercise1():
+    plot_cubic_spline(x_points, y_points)
+    plot_function_b(-1/2, 1/4)
+    plot_function_a(1/4, 1/4)
     plt.show()
 
+
+def Beinstein(n, k):
+    coeff = binom(n, k)
+
+    def _bpoly(x):
+        return coeff * x ** k * (1 - x) ** (n - k)
+
+    return _bpoly
+
+
+def Bezier(points, num=200):
+    N = len(points)
+    t = np.linspace(0, 1, num=num)
+    curve = np.zeros((num, 2))
+    for ii in range(N):
+        curve += np.outer(Beinstein(N - 1, ii)(t), points[ii])
+    return curve
+
+
+def exercise2():
+    xp = np.array([1, 2, 3, 4, 6])
+    yp = np.array([1, 3, 3, 3, 4])
+
+    x, y = Bezier(list(zip(xp, yp))).T
+
+    plt.plot(x,y)
+    plt.plot(xp, yp, "ro")
+    plt.plot(xp, yp, "b--")
+
+    t = np.linspace(1, 6, 10_000)
+
+    x_t = calculated_function_x(t)
+    y_t = calculated_function_y(t)
+
+    plt.plot(x_t, y_t)
+
+
+    plt.show()
