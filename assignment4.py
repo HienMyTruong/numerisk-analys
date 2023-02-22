@@ -99,3 +99,5 @@ def exercise2():
 
 
     plt.show()
+
+exercise2()
