@@ -78,8 +78,8 @@ def exercise2():
     ],dtype=float)
 
     r_matrix = np.array([
-        [6.3246, -6.7989],
-        [0, 7.6010],
+        [-6.3246, -6.7989],
+        [0, -7.6010],
         [0, 0],
         [0, 0],
         [0, 0],
@@ -88,10 +88,81 @@ def exercise2():
 
     print(f"{q_matrix.shape=}, {r_matrix.shape=}")
     a_matrix = np.matmul(q_matrix, r_matrix)
+    print(a_matrix)
 
-    return a_matrix
+
+    b_matrix = np.array([[1], [0], [0], [0], [1], [0]], dtype=float)
+
+
+    print(np.matmul(q_matrix.T, b_matrix))
+
+
+
+
+def exercise3():
+    """
+    a_matrix = np.array([
+        [1, 0],
+        [0, 1],
+        [0, 0],
+        [0, 0],
+        [0, 0],
+        [0, 0]
+    ], dtype=float)
+
+    b_matrix = np.array([
+        [1],
+        [1],
+        [1],
+        [1]
+    ], dtype=float)
+    """
+
+    a_matrix = np.array([
+        [1, 0, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0]
+    ], dtype=float)
+
+
+
+    b_matrix = np.array([
+        [8],
+        [2],
+        [9],
+        [-1],
+        [4],
+        [10],
+        [1],
+        [7],
+        [21]
+    ], dtype=float)
+
+    a_t_cross_a = np.matmul(a_matrix.T, a_matrix)
+    print(a_t_cross_a)
+    print("\n")
+    b_new = np.matmul(a_matrix.T, b_matrix)
+
+
+    a_with_b_new = np.matmul(a_matrix, b_new)
+    print(b_matrix - a_with_b_new)
+    print("\n")
+    print(b_matrix - a_with_b_new )
+    print("\n")
+    print(np.linalg.norm(b_matrix - a_with_b_new))
 
 
 
 exercise1()
-print(exercise2())
+exercise2()
+exercise3()
+
+breakpoint()
+
+
