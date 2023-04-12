@@ -16,7 +16,7 @@ def h(x):
     # print(x)
     #return math.log(x-x**3)
     #return math.cos(x)
-    return math.cos(x)**2
+    return (x**3 - 2)/2
     #return (2*(x**3)-math.exp(x))/(3*(x**2)-1)
     #return (x**3 + math.exp(x))
 
@@ -145,7 +145,7 @@ def fixed_point_iteration_recursive(start_value, n):
 
 
 def exercise2a():
-    print(fixed_point_iteration(0.6417, 100))
+    print(fixed_point_iteration(4, 7))
 
 
 exercise2a()
